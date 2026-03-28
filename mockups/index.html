@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KinderAI — Design Mockups v2</title>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ═══════════════════════════════════════════
+       BRAND TOKENS — single source of truth
+       ═══════════════════════════════════════════ */
+    :root {
+      /* Primary brand */
+      --brand:      #F5A420;   /* Adventure Amber — the ONE primary color */
+      --brand-deep: #C97D0E;   /* Darker amber for shadows/borders */
+      --brand-glow: rgba(245,164,32,0.35);
+
+      /* Dark surfaces */
+      --dark-900: #0F1224;     /* Deepest — phone/page bg */
+      --dark-800: #14182E;     /* Screen bg (dark screens) */
+      --dark-700: #1C2244;     /* Cards on dark */
+      --dark-600: #242B52;     /* Borders/dividers on dark */
+      --dark-400: #3D4670;     /* Muted text on dark */
+
+      /* Light surfaces */
+      --warm-50:  #FDF8EF;     /* Screen bg (warm screens) */
+      --warm-100: #F5EDD8;     /* Subtle dividers on warm */
+      --warm-200: #E8DEC4;     /* Borders on warm */
+
+      /* Text */
+      --text-900: #0F1224;
+      --text-700: #2A3050;
+      --text-500: #5C6375;
+      --text-300: #9299B0;
+      --text-white: #F0F3FF;
+
+      /* Tier colors — coordinated to feel like one family */
+      --t1: #F5A420;   /* Sparks    — brand amber */
+      --t2: #3AB6EC;   /* Builders  — sky */
+      --t3: #8A68D4;   /* Makers    — violet */
+      --t4: #1CBDAC;   /* Architects— jade */
+
+      /* Semantic */
+      --success: #3AC47A;
+      --error:   #E95C5C;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--dark-900);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2.5rem 1rem 4rem;
+      gap: 1.25rem;
+    }
+
+    /* Starfield */
+    .starfield { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .star {
+      position: absolute; border-radius: 50%; background: #F0F3FF;
+      animation: twinkle var(--dur,3s) ease-in-out infinite var(--delay,0s);
+    }
+    @keyframes twinkle {
+      0%,100% { opacity: 0.15; transform: scale(1); }
+      50%      { opacity: 0.7;  transform: scale(1.5); }
+    }
+
+    /* Page chrome */
+    .page-header { position: relative; z-index: 2; text-align: center; }
+    .page-title {
+      font-family: 'Baloo 2', sans-serif; font-size: 1.55rem; font-weight: 800;
+      letter-spacing: -0.02em; color: var(--brand);
+    }
+    .page-title span { color: #8890B8; }
+    .page-subtitle { font-size: 0.78rem; color: var(--dark-400); margin-top: 0.2rem; }
+
+    .screen-info {
+      position: relative; z-index: 2;
+      display: flex; align-items: center; gap: 0.7rem; height: 30px;
+    }
+    .scr-counter { font-size: 0.7rem; font-weight: 800; color: var(--dark-600); text-transform: uppercase; letter-spacing: 0.06em; }
+    .scr-name { font-family: 'Baloo 2', sans-serif; font-size: 0.92rem; font-weight: 700; color: var(--text-white); }
+    .tier-chip {
+      font-size: 0.62rem; font-weight: 800; padding: 0.18rem 0.6rem;
+      border-radius: 999px; text-transform: uppercase; letter-spacing: 0.06em;
+    }
+    .chip-all  { background: rgba(245,164,32,.15); color: var(--brand); }
+    .chip-t1   { background: rgba(245,164,32,.15); color: var(--t1); }
+    .chip-t2   { background: rgba(58,182,236,.15); color: var(--t2); }
+    .chip-t3   { background: rgba(138,104,212,.15); color: var(--t3); }
+    .chip-t4   { background: rgba(28,189,172,.15); color: var(--t4); }
+    .chip-par  { background: rgba(58,196,122,.15); color: var(--success); }
+
+    /* Phone */
+    .phone-wrap { position: relative; z-index: 2; }
+    .phone {
+      width: 375px; height: 812px;
+      border-radius: 50px;
+      background: var(--dark-900);
+      border: 2.5px solid var(--dark-600);
+      box-shadow: 0 0 0 1px var(--dark-800), 0 40px 100px rgba(0,0,0,.75), inset 0 1px 0 rgba(255,255,255,.05);
+      position: relative; overflow: hidden;
+    }
+    .d-island {
+      position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
+      width: 112px; height: 33px; background: #060810; border-radius: 999px; z-index: 100;
+    }
+    .screen-area { position: absolute; inset: 0; border-radius: 48px; overflow: hidden; }
+    .home-bar {
+      position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
+      width: 130px; height: 5px; background: rgba(255,255,255,.25); border-radius: 999px; z-index: 100;
+    }
+
+    /* Screens */
+    .screen { position: absolute; inset: 0; display: none; flex-direction: column; }
+    .screen.active { display: flex; }
+
+    /* Navigation */
+    .nav-row { position: relative; z-index: 2; display: flex; align-items: center; gap: 1.5rem; }
+    .nav-btn {
+      width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--dark-600);
+      background: var(--dark-800); color: var(--dark-400); font-size: 1.1rem;
+      cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all .15s;
+    }
+    .nav-btn:hover:not(:disabled) { border-color: var(--brand); color: var(--brand); }
+    .nav-btn:disabled { opacity: .3; cursor: default; }
+    .dots { display: flex; gap: 7px; align-items: center; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--dark-600); cursor: pointer; transition: all .2s; }
+    .dot.active { background: var(--brand); width: 22px; border-radius: 4px; }
+
+    /* Notes */
+    .notes-panel {
+      position: relative; z-index: 2; width: 375px;
+      background: var(--dark-800); border-radius: 16px; border: 1px solid var(--dark-600); padding: 1rem 1.25rem;
+    }
+    .notes-ttl { font-family: 'Baloo 2',sans-serif; font-size: .7rem; font-weight: 700; color: var(--brand); text-transform: uppercase; letter-spacing: .1em; margin-bottom: .55rem; }
+    .notes-ul { list-style: none; display: flex; flex-direction: column; gap: .28rem; }
+    .notes-ul li { font-size: .73rem; color: var(--dark-400); padding-left: .85rem; position: relative; line-height: 1.4; }
+    .notes-ul li::before { content:'·'; position:absolute; left:0; color:var(--brand); }
+
+    /* ═══════════════════════════════════════════
+       SHARED COMPONENT TOKENS
+       ═══════════════════════════════════════════ */
+    @keyframes float  { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+    @keyframes pop    { 0%{transform:scale(0)} 65%{transform:scale(1.08)} 100%{transform:scale(1)} }
+    @keyframes bdot   { 0%,100%{transform:translateY(0);opacity:.35} 50%{transform:translateY(-7px);opacity:1} }
+
+    /* Primary CTA — used on ALL warm screens */
+    .cta {
+      width: 100%; padding: 1rem;
+      background: var(--brand); color: #FFF;
+      font-family: 'Baloo 2',sans-serif; font-size: 1.1rem; font-weight: 700;
+      border: none; border-radius: 18px; cursor: pointer;
+      box-shadow: 0 6px 22px var(--brand-glow); transition: transform .12s, box-shadow .12s;
+    }
+    .cta:active { transform: scale(.97); box-shadow: 0 3px 10px var(--brand-glow); }
+
+    /* Lesson chrome */
+    .lesson-top {
+      padding: 3.5rem 1.5rem .75rem;
+      display: flex; align-items: center; gap: .75rem;
+    }
+    .l-back {
+      width: 38px; height: 38px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0;
+    }
+    .l-track { flex: 1; height: 8px; border-radius: 999px; overflow: hidden; }
+    .l-fill  { height: 100%; border-radius: 999px; }
+    .l-hearts { display: flex; gap: 4px; font-size: .95rem; }
+    .lesson-body { flex: 1; padding: .5rem 1.5rem 1.5rem; display: flex; flex-direction: column; align-items: center; gap: 1.2rem; }
+
+    /* Companion speak bubble */
+    .speak {
+      border-radius: 20px; padding: .95rem 1.1rem;
+      display: flex; align-items: center; gap: .65rem; width: 100%;
+    }
+    .speak-ava   { font-size: 1.85rem; flex-shrink: 0; }
+    .speak-txt   { font-size: .84rem; font-weight: 700; color: #FFF; line-height: 1.5; flex: 1; }
+    .speak-audio {
+      width: 34px; height: 34px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; font-size: .9rem; cursor: pointer; flex-shrink: 0;
+    }
+
+    /* Step label used on onboarding screens */
+    .step-lbl  { font-size: .73rem; font-weight: 800; color: var(--text-300); text-transform: uppercase; letter-spacing: .1em; }
+    .scr-hdg   { font-family: 'Baloo 2',sans-serif; font-size: 2rem; font-weight: 800; color: var(--text-900); letter-spacing: -.04em; line-height: 1.1; }
+
+    /* ═══════════════════════════════════════════
+       SCREEN 1 — SPLASH
+       ═══════════════════════════════════════════ */
+    .s-splash {
+      background: var(--dark-800);
+      align-items: center; justify-content: center; gap: 2rem;
+    }
+    .splash-glow {
+      position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(ellipse 65% 55% at 50% 50%, rgba(245,164,32,.1), transparent),
+                  radial-gradient(ellipse 40% 30% at 25% 75%, rgba(242,107,78,.07), transparent);
+    }
+    .splash-inner { position: relative; display: flex; flex-direction: column; align-items: center; gap: 1.2rem; }
+    .splash-mark {
+      width: 92px; height: 92px; border-radius: 28px;
+      background: linear-gradient(135deg, #F5A420 0%, #E8821A 100%);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 8px 36px rgba(245,164,32,.5), 0 0 80px rgba(245,164,32,.1);
+      animation: float 3.2s ease-in-out infinite;
+    }
+    .splash-wordmark { font-family: 'Baloo 2',sans-serif; font-size: 2.8rem; font-weight: 800; color: #F0F3FF; letter-spacing: -.04em; line-height: 1; }
+    .splash-wordmark em { color: var(--brand); font-style: normal; }
+    .splash-tag { font-size: .95rem; color: var(--dark-400); text-align: center; max-width: 220px; line-height: 1.5; }
+    .splash-dots { display: flex; gap: 8px; }
+    .splash-dot {
+      width: 9px; height: 9px; background: var(--brand); border-radius: 50%;
+      animation: bdot 1.2s ease-in-out infinite;
+    }
+    .splash-dot:nth-child(2) { animation-delay: .18s; }
+    .splash-dot:nth-child(3) { animation-delay: .36s; }
+
+    /* ═══════════════════════════════════════════
+       SCREEN 2 — WELCOME
+       ═══════════════════════════════════════════ */
+    .s-welcome { background: var(--warm-50); }
+    .welcome-body {
+      flex: 1; display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 1.5rem; padding: 4.5rem 2rem 1.5rem;
+    }
+    .c-area { position: relative; width: 150px; height: 160px; }
+    .c-bubble {
+      position: absolute; top: -8px; right: -68px;
+      background: var(--dark-800); color: var(--text-white);
+      font-size: .72rem; font-weight: 700; padding: .48rem .72rem;
+      border-radius: 12px 12px 12px 3px; white-space: nowrap;
+      box-shadow: 0 4px 14px rgba(0,0,0,.2);
+    }
+    .c-svg { width: 150px; height: 150px; animation: float 3.2s ease-in-out infinite; }
+    .welcome-hdg { font-family: 'Baloo 2',sans-serif; font-size: 2.4rem; font-weight: 800; color: var(--text-900); letter-spacing: -.04em; text-align: center; line-height: 1.1; }
+    .welcome-sub { font-size: 1rem; color: var(--text-500); text-align: center; line-height: 1.65; max-width: 260px; }
+    .welcome-foot { padding: 1rem 2rem 3rem; }
+
+    /* ═══════════════════════════════════════════
+       SCREEN 3 — AGE SELECT
+       ═══════════════════════════════════════════ */
+    .s-age { background: var(--warm-50); padding: 4.5rem 2rem 2rem; gap: 1.75rem; }
+    .age-row { display: flex; align-items: center; justify-content: center; gap: 1.75rem; }
+    .age-step {
+      width: 54px; height: 54px; border-radius: 50%;
+      border: 2.5px solid var(--warm-200); background: #FFF;
+      color: var(--text-700); font-size: 1.6rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all .14s; box-shadow: 0 2px 8px rgba(0,0,0,.06);
+      font-family: 'Baloo 2',sans-serif; font-weight: 700; line-height: 1;
+    }
+    .age-step:hover { border-color: var(--brand); color: var(--brand); }
+    .age-num { font-family: 'Baloo 2',sans-serif; font-size: 5.5rem; font-weight: 800; color: var(--text-900); line-height: 1; min-width: 110px; text-align: center; }
+    .tier-card { border-radius: 22px; padding: 1.2rem; display: flex; align-items: center; gap: 1rem; transition: all .2s; }
+    .tier-card-ico { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .tier-card-name { font-family: 'Baloo 2',sans-serif; font-size: 1.15rem; font-weight: 800; line-height: 1; }
+    .tier-card-desc { font-size: .8rem; color: var(--text-500); margin-top: .35rem; line-height: 1.4; }
+
+    /* ═══════════════════════════════════════════
+       SCREEN 4 — AVATAR SELECT
+       ═══════════════════════════════════════════ */
+    .s-avatar { background: var(--warm-50); padding: 4.5rem 1.5rem 2rem; gap: 1.5rem; }
+    .avatar-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .9rem; }
+    .av-card {
+      background: #FFF; border-radius: 24px; padding: 1.3rem 1rem 1.1rem;
+      display: flex; flex-direction: column; align-items: center; gap: .5rem;
+      border: 3px solid transparent; cursor: pointer;
+      transition: all .18s; box-shadow: 0 3px 12px rgba(0,0,0,.06); position: relative;
+    }
+    .av-card.on { border-color: var(--brand); box-shadow: 0 6px 24px rgba(245,164,32,.22); transform: scale(1.03); }
+    .av-em { font-size: 3.5rem; line-height: 1.1; }
+    .av-name { font-family: 'Baloo 2',sans-serif; font-size: 1.05rem; font-weight: 700; color: var(--text-900); }
+    .av-trait { font-size: .7rem; color: var(--text-300); text-align: center; line-height: 1.4; }
+    .av-tick {
+      width: 22px; height: 22px; background: var(--brand); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #FFF; font-size: .72rem; font-weight: 800; position: absolute; top: 10px; right: 10px;
+    }
+
+    /* ═══════════════════════════════════════════
+       SCREEN 5 — WORLD MAP (flex layout — fixes broken layout)
+       ═══════════════════════════════════════════ */
+    .s-map { background: var(--dark-800); }
+
+    /* Absolutely-positioned decorative layers (behind content) */
+    .map-terrain {
+      position: absolute; inset: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 55% 40% at 28% 38%, rgba(42,140,95,.45),  transparent),
+        radial-gradient(ellipse 45% 35% at 74% 62%, rgba(28,80,160,.38),  transparent),
+        radial-gradient(ellipse 35% 28% at 55% 22%, rgba(140,90,35,.32),  transparent),
+        radial-gradient(ellipse 30% 22% at 82% 82%, rgba(35,120,85,.28),  transparent);
+    }
+    .map-grid-bg {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image: linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 30px 30px;
+    }
+
+    /* Header — fixed height */
+    .map-hdr {
+      position: relative; z-index: 10;
+      padding: 3.5rem 1.5rem .75rem;
+      display: flex; justify-content: space-between; align-items: flex-start;
+      flex-shrink: 0;
+    }
+    .map-hi   { font-size: .76rem; color: rgba(255,255,255,.38); font-weight: 600; }
+    .map-name { font-family: 'Baloo 2',sans-serif; font-size: 1.45rem; font-weight: 800; color: #FFF; line-height: 1.1; }
+    .ap-pill  {
+      display: flex; align-items: center; gap: .38rem;
+      background: rgba(245,164,32,.14); border: 1.5px solid rgba(245,164,32,.32);
+      border-radius: 12px; padding: .38rem .8rem; margin-bottom: .28rem;
+    }
+    .ap-val { font-family: 'Baloo 2',sans-serif; font-size: .88rem; font-weight: 700; color: var(--brand); }
+    .streak-lbl { font-size: .68rem; color: rgba(255,255,255,.38); font-weight: 700; text-align: right; }
+
+    /* Zone canvas — takes remaining space, positions zones absolutely within */
+    .map-canvas {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* SVG path lines */
+    .map-paths {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 2; pointer-events: none;
+    }
+
+    /* Zone circles */
+    .zone {
+      position: absolute; z-index: 5;
+      display: flex; flex-direction: column; align-items: center; gap: .45rem;
+      cursor: pointer;
+    }
+    .zone-orb {
+      border-radius: 50%;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .2rem;
+      transition: transform .18s;
+    }
+    .zone-orb:hover { transform: scale(1.07); }
+    .zone-lbl {
+      font-family: 'Baloo 2',sans-serif; font-size: .68rem; font-weight: 700;
+      color: #FFF; text-align: center; line-height: 1.2;
+    }
+    .zone-stars { font-size: .72rem; }
+
+    /* Zone positions — within map-canvas (after header ~125px removed) */
+    .z-ask    { top:  55px; left:  18px; }
+    .z-think  { top:  45px; right: 18px; }
+    .z-build  { top: 300px; left:  28px; }
+    .z-charge { top: 290px; right: 22px; }
+
+    /* Zone colors */
+    .z-ask   .zone-orb { width:108px;height:108px; background:radial-gradient(circle,rgba(245,164,32,.82),rgba(200,128,10,.6)); border:2.5px solid rgba(245,164,32,.5); box-shadow:0 0 32px rgba(245,164,32,.28); }
+    .z-think .zone-orb { width: 98px;height: 98px; background:radial-gradient(circle,rgba(58,182,236,.82),rgba(30,130,200,.6)); border:2.5px solid rgba(58,182,236,.5); box-shadow:0 0 28px rgba(58,182,236,.28); }
+    .z-build .zone-orb { width: 92px;height: 92px; background:radial-gradient(circle,rgba(58,196,122,.82),rgba(28,150,80,.6)); border:2.5px solid rgba(58,196,122,.5); box-shadow:0 0 26px rgba(58,196,122,.28); }
+    .z-charge .zone-orb { width:100px;height:100px; background:radial-gradient(circle,rgba(138,104,212,.72),rgba(100,70,170,.55)); border:2.5px solid rgba(138,104,212,.4); box-shadow:0 0 26px rgba(138,104,212,.22); opacity:.7; }
+
+    /* Companion fox on map */
+    .map-fox {
+      position: absolute; z-index: 6;
+      top: 195px; left: 43%;
+      font-size: 2.1rem;
+      animation: float 3.2s ease-in-out infinite;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,.5));
+    }
+
+    /* Bottom tab bar */
+    .map-nav {
+      flex-shrink: 0;
+      background: rgba(10,13,28,.94);
+      border-top: 1px solid rgba(255,255,255,.07);
+      padding: .65rem .75rem 2.2rem;
+      display: flex; justify-content: space-around;
+      backdrop-filter: blur(16px);
+    }
+    .tab {
+      display: flex; flex-direction: column; align-items: center; gap: .25rem; cursor: pointer;
+    }
+    .tab svg { width: 22px; height: 22px; color: rgba(255,255,255,.28); }
+    .tab-lbl { font-size: .6rem; font-weight: 800; color: rgba(255,255,255,.28); text-transform: uppercase; letter-spacing: .05em; }
+    .tab.on svg  { color: var(--brand); filter: drop-shadow(0 0 5px var(--brand)); }
+    .tab.on .tab-lbl { color: var(--brand); }
+
+    /* ═══════════════════════════════════════════
+       SCREEN 6 — LESSON TIER 1 (SPARKS)
+       ═══════════════════════════════════════════ */
+    .s-l1 { background: var(--warm-50); }
+    .icon-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .9rem; width: 100%; }
+    .icon-tile {
+      background: #FFF; border-radius: 22px; padding: 1.35rem 1rem;
+      display: flex; flex-direction: column; align-items: center; gap: .4rem;
+      cursor: pointer; border: 3px solid transparent;
+      box-shadow: 0 3px 12px rgba(0,0,0,.07); transition: all .14s;
+    }
+    .icon-tile:hover      { border-color: var(--brand); transform: scale(1.02); }
+    .icon-tile.correct    { border-color: var(--success); background: rgba(58,196,122,.06); }
+    .tile-em  { font-size: 3.1rem; line-height: 1; }
+    .l-ctx    { font-size: .74rem; color: var(--text-300); font-weight: 700; text-align: center; }
+
+    /* ═══════════════════════════════════════════
+       SCREEN 7 — LESSON TIER 3 (MAKERS)
+       ═══════════════════════════════════════════ */
+    .s-l3 { background: #F5F0FF; }
+    .challenge-box { background: #FFF; border-radius: 20px; padding: 1.1rem 1.15rem; width: 100%; box-shadow: 0 3px 12px rgba(0,0,0,.06); }
+    .chal-lbl  { font-size: .67rem; font-weight: 800; color: var(--t3); text-transform: uppercase; letter-spacing: .1em; margin-bottom: .5rem; }
+    .ai-quote  { background: rgba(138,104,212,.08); border-left: 3px solid var(--t3); padding: .7rem .9rem; border-radius: 0 12px 12px 0; font-size: .84rem; color: var(--text-700); line-height: 1.55; font-style: italic; }
+    .chal-q    { font-size: .92rem; font-weight: 700; color: var(--text-900); margin-top: .7rem; }
+    .chips-row { display: flex; flex-wrap: wrap; gap: .42rem; margin-bottom: .65rem; }
+    .chip-btn  {
+      background: rgba(138,104,212,.1); border: 1.5px solid rgba(138,104,212,.28);
+      border-radius: 999px; padding: .3rem .68rem;
+      font-size: .7rem; font-weight: 700; color: var(--t3); cursor: pointer; transition: all .12s;
+    }
+    .chip-btn.on { background: var(--t3); color: #FFF; border-color: var(--t3); }
+    .t3-ta {
+      width: 100%; background: #FFF; border: 2px solid #E0D8F8; border-radius: 16px;
+      padding: .78rem .95rem; font-family: 'Nunito',sans-serif; font-size: .88rem;
+      color: var(--text-900); resize: none; outline: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,.04); transition: border-color .15s;
+    }
+    .t3-ta:focus { border-color: var(--t3); }
+    .cta-t3 { background: var(--t3) !important; box-shadow: 0 6px 22px rgba(138,104,212,.4) !important; }
+
+    /* ═══════════════════════════════════════════
+       SCREEN 8 — QUEST COMPLETE
+       ═══════════════════════════════════════════ */
+    .s-complete { background: var(--dark-800); align-items: center; justify-content: center; gap: 1.4rem; padding: 2rem; position: relative; overflow: hidden; }
+    .comp-glow  { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse 85% 65% at 50% 50%, rgba(245,164,32,.09), transparent); }
+    .confetti-area { position: absolute; inset: 0; pointer-events: none; }
+    .cnf { position: absolute; font-size: 1.35rem; animation: fall var(--dur) ease-out forwards; opacity: 0; }
+    @keyframes fall {
+      0%  { transform: translateY(-20px) rotate(0deg) scale(0); opacity: 0; }
+      30% { opacity: 1; }
+      100%{ transform: translateY(600px) rotate(360deg) scale(1); opacity: .5; }
+    }
+    .medal-ico { font-size: 5.5rem; animation: pop .5s cubic-bezier(.34,1.56,.64,1) .2s both; }
+    .comp-ttl  { font-family: 'Baloo 2',sans-serif; font-size: 2rem; font-weight: 800; color: #FFF; text-align: center; position: relative; }
+    .comp-stars{ display: flex; gap: .5rem; font-size: 2.5rem; position: relative; }
+    .xp-box {
+      background: rgba(255,255,255,.05); border: 1.5px solid rgba(255,255,255,.1);
+      border-radius: 20px; padding: 1.15rem 2rem;
+      display: flex; flex-direction: column; align-items: center; gap: .4rem; width: 100%; position: relative;
+    }
+    .xpe-lbl { font-size: .7rem; font-weight: 800; color: rgba(255,255,255,.32); text-transform: uppercase; letter-spacing: .1em; }
+    .xpe-val { font-family: 'Baloo 2',sans-serif; font-size: 3.1rem; font-weight: 800; color: var(--brand); line-height: 1; }
+    .badge-row {
+      display: flex; align-items: center; gap: .75rem;
+      background: rgba(245,164,32,.08); border: 1.5px solid rgba(245,164,32,.24);
+      border-radius: 18px; padding: .88rem 1.2rem; width: 100%; position: relative;
+    }
+    .br-ico  { font-size: 2rem; }
+    .br-new  { font-size: .6rem; font-weight: 800; color: var(--brand); text-transform: uppercase; letter-spacing: .1em; }
+    .br-name { font-family: 'Baloo 2',sans-serif; font-size: 1rem; font-weight: 700; color: #FFF; }
+
+    /* ═══════════════════════════════════════════
+       SCREEN 9 — PROFILE
+       ═══════════════════════════════════════════ */
+    .s-profile { background: var(--warm-50); }
+    .prof-hero  { background: var(--dark-800); padding: 3.5rem 1.5rem 1.75rem; display: flex; flex-direction: column; align-items: center; gap: .9rem; flex-shrink: 0; }
+    .ring       { width: 88px; height: 88px; border-radius: 50%; background: conic-gradient(from 180deg, var(--brand), var(--coral,#F26B4E), var(--sky,#4EC9DC), var(--brand)); padding: 3px; display: flex; align-items: center; justify-content: center; }
+    .ring-inner { width:100%; height:100%; border-radius:50%; background: var(--dark-800); display:flex; align-items:center; justify-content:center; font-size:2.8rem; }
+    .prof-name  { font-family:'Baloo 2',sans-serif; font-size:1.5rem; font-weight:800; color:#FFF; }
+    .prof-pill  { background:rgba(245,164,32,.14); border:1.5px solid rgba(245,164,32,.34); border-radius:999px; padding:.28rem .95rem; font-size:.78rem; font-weight:700; color:var(--brand); }
+    .prof-stats { display:flex; gap:.75rem; width:100%; margin-top:.25rem; }
+    .ps         { flex:1; display:flex; flex-direction:column; align-items:center; gap:.15rem; }
+    .ps-v       { font-family:'Baloo 2',sans-serif; font-size:1.4rem; font-weight:800; color:#FFF; }
+    .ps-l       { font-size:.6rem; font-weight:800; color:rgba(255,255,255,.28); text-transform:uppercase; letter-spacing:.06em; }
+    .ps-div     { width:1px; background:rgba(255,255,255,.1); align-self:stretch; }
+    .prof-body  { flex:1; padding:1.5rem; overflow-y:auto; display:flex; flex-direction:column; gap:1.4rem; }
+    .sec-hd     { font-family:'Baloo 2',sans-serif; font-size:.9rem; font-weight:700; color:var(--text-900); margin-bottom:.72rem; }
+    .xp-card    { background:#FFF; border-radius:20px; padding:1.1rem 1.2rem; box-shadow:0 2px 10px rgba(0,0,0,.05); }
+    .xpc-hd     { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:.65rem; }
+    .xpc-lv     { font-family:'Baloo 2',sans-serif; font-size:1.02rem; font-weight:700; color:var(--text-900); }
+    .xpc-ct     { font-size:.76rem; color:var(--text-300); font-weight:600; }
+    .xp-trk     { height:11px; background:var(--warm-100); border-radius:999px; overflow:hidden; }
+    .xp-fill    { height:100%; background:linear-gradient(90deg,var(--brand),#E8821A); border-radius:999px; width:68%; }
+    .badge-shelf{ display:grid; grid-template-columns:repeat(4,1fr); gap:.68rem; }
+    .btile      { background:#FFF; border-radius:16px; padding:.68rem .48rem; display:flex; flex-direction:column; align-items:center; gap:.28rem; box-shadow:0 2px 8px rgba(0,0,0,.05); }
+    .bt-ico     { font-size:1.65rem; }
+    .bt-nm      { font-size:.57rem; font-weight:700; color:var(--text-300); text-align:center; line-height:1.3; }
+    .btile.dim  { opacity:.26; filter:grayscale(1); }
+
+    /* ═══════════════════════════════════════════
+       SCREEN 10 — PARENT DASHBOARD
+       ═══════════════════════════════════════════ */
+    .s-parent   { background: #EEF1F8; }
+    .par-hdr    { background: var(--dark-800); padding: 3.5rem 1.5rem 1.5rem; flex-shrink: 0; }
+    .par-back   { display:flex; align-items:center; gap:.45rem; font-size:.8rem; font-weight:700; color:rgba(255,255,255,.28); margin-bottom:.85rem; cursor:pointer; }
+    .par-ttl    { font-family:'Baloo 2',sans-serif; font-size:1.5rem; font-weight:800; color:#FFF; }
+    .par-sub    { font-size:.78rem; color:rgba(255,255,255,.32); margin-top:.2rem; }
+    .par-body   { flex:1; padding:1.15rem; overflow-y:auto; display:flex; flex-direction:column; gap:.85rem; }
+    .child-row  { background:#FFF; border-radius:20px; padding:1.05rem 1.15rem; display:flex; align-items:center; gap:.85rem; box-shadow:0 2px 10px rgba(0,0,0,.05); }
+    .ch-av      { font-size:2.3rem; background:rgba(245,164,32,.1); width:50px; height:50px; border-radius:14px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .ch-name    { font-family:'Baloo 2',sans-serif; font-size:.98rem; font-weight:700; color:var(--text-900); }
+    .ch-tier    { font-size:.7rem; color:var(--text-300); font-weight:600; }
+    .ch-dot     { display:flex; align-items:center; gap:4px; font-size:.68rem; color:var(--success); font-weight:700; margin-top:.18rem; }
+    .mets       { display:grid; grid-template-columns:1fr 1fr; gap:.68rem; }
+    .met        { background:#FFF; border-radius:16px; padding:.9rem 1rem; box-shadow:0 2px 8px rgba(0,0,0,.04); }
+    .met-ico    { margin-bottom:.28rem; }
+    .met-val    { font-family:'Baloo 2',sans-serif; font-size:1.4rem; font-weight:800; color:var(--text-900); }
+    .met-lbl    { font-size:.66rem; font-weight:700; color:var(--text-300); }
+    .pillars-card { background:#FFF; border-radius:20px; padding:1.05rem 1.15rem; box-shadow:0 2px 10px rgba(0,0,0,.05); }
+    .pillar     { display:flex; align-items:center; gap:.65rem; }
+    .pil-trk    { flex:1; height:7px; background:#EEF1F8; border-radius:999px; overflow:hidden; }
+    .pil-fill   { height:100%; border-radius:999px; }
+    .pil-pct    { font-size:.68rem; font-weight:700; color:var(--text-300); width:24px; text-align:right; flex-shrink:0; }
+  </style>
+</head>
+<body>
+
+  <div class="starfield" id="starfield"></div>
+
+  <!-- SVG icon library -->
+  <svg style="display:none">
+    <defs>
+      <!-- App logo mark -->
+      <symbol id="ico-logo" viewBox="0 0 48 48" fill="none">
+        <path d="M24 5 L27.5 20 L24 18 L20.5 20 Z" fill="#fff"/>
+        <path d="M24 43 L20.5 28 L24 30 L27.5 28 Z" fill="#fff" opacity=".45"/>
+        <path d="M5 24 L20 27.5 L18 24 L20 20.5 Z" fill="#fff" opacity=".45"/>
+        <path d="M43 24 L28 20.5 L30 24 L28 27.5 Z" fill="#fff" opacity=".45"/>
+        <circle cx="24" cy="24" r="5.5" fill="#fff"/>
+        <circle cx="24" cy="24" r="10.5" stroke="#fff" stroke-width="1" stroke-dasharray="2.5 3" opacity=".25"/>
+      </symbol>
+
+      <!-- Compass (Map tab) -->
+      <symbol id="ico-compass" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="9.5" stroke="currentColor" stroke-width="1.8" opacity=".4"/>
+        <path d="M12 4 L14.5 11.5 L12 10 L9.5 11.5 Z" fill="currentColor"/>
+        <path d="M12 20 L9.5 12.5 L12 14 L14.5 12.5 Z" fill="currentColor" opacity=".4"/>
+        <circle cx="12" cy="12" r="2" fill="currentColor" opacity=".7"/>
+      </symbol>
+
+      <!-- Lightning bolt (Quests tab) -->
+      <symbol id="ico-quest" viewBox="0 0 24 24" fill="none">
+        <path d="M13 2.5 L6 13 L11.5 13 L10.5 21.5 L18.5 11 L13 11 Z" fill="currentColor"/>
+      </symbol>
+
+      <!-- Shield with star (Badges tab) -->
+      <symbol id="ico-badge" viewBox="0 0 24 24" fill="none">
+        <path d="M12 3 L20 6.5 L20 13.5 C20 17.8 16.5 21 12 22.5 C7.5 21 4 17.8 4 13.5 L4 6.5 Z" fill="currentColor" opacity=".85"/>
+        <path d="M12 8.5 L13 11 L15.5 11 L13.5 12.7 L14.2 15.5 L12 13.8 L9.8 15.5 L10.5 12.7 L8.5 11 L11 11 Z" fill="white"/>
+      </symbol>
+
+      <!-- Person circle (Profile tab) -->
+      <symbol id="ico-profile" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="8" r="4" fill="currentColor"/>
+        <path d="M4 20.5 C4 16.5 7.6 13.5 12 13.5 C16.4 13.5 20 16.5 20 20.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" fill="none" opacity=".7"/>
+      </symbol>
+
+      <!-- Zone: Ask Well — speech bubble with star burst -->
+      <symbol id="ico-ask" viewBox="0 0 32 32" fill="none">
+        <path d="M5 7 C5 5.3 6.3 4 8 4 L24 4 C25.7 4 27 5.3 27 7 L27 19 C27 20.7 25.7 22 24 22 L18.5 22 L16 27 L13.5 22 L8 22 C6.3 22 5 20.7 5 19 Z" fill="white" opacity=".18"/>
+        <path d="M16 8 L17.2 12 L21.5 12 L18.2 14.6 L19.5 19 L16 16.5 L12.5 19 L13.8 14.6 L10.5 12 L14.8 12 Z" fill="white"/>
+      </symbol>
+
+      <!-- Zone: Think Critically — eye with rays -->
+      <symbol id="ico-think" viewBox="0 0 32 32" fill="none">
+        <path d="M4 16 C8 10 12 7 16 7 C20 7 24 10 28 16 C24 22 20 25 16 25 C12 25 8 22 4 16 Z" fill="white" opacity=".18"/>
+        <circle cx="16" cy="16" r="5" fill="white"/>
+        <circle cx="16" cy="16" r="2.5" fill="#3AB6EC"/>
+        <line x1="27" y1="5" x2="24" y2="8" stroke="white" stroke-width="1.8" stroke-linecap="round" opacity=".7"/>
+        <line x1="29" y1="9" x2="25.5" y2="10.5" stroke="white" stroke-width="1.8" stroke-linecap="round" opacity=".7"/>
+        <line x1="27" y1="13" x2="24" y2="13" stroke="white" stroke-width="1.8" stroke-linecap="round" opacity=".7"/>
+      </symbol>
+
+      <!-- Zone: Build with AI — interlocking hexagons -->
+      <symbol id="ico-build" viewBox="0 0 32 32" fill="none">
+        <polygon points="11,3 17,3 20,8.2 17,13.4 11,13.4 8,8.2" fill="white" opacity=".55"/>
+        <polygon points="16.5,14.5 22.5,14.5 25.5,19.7 22.5,24.9 16.5,24.9 13.5,19.7" fill="white" opacity=".9"/>
+        <polygon points="5.5,14.5 11.5,14.5 14.5,19.7 11.5,24.9 5.5,24.9 2.5,19.7" fill="white" opacity=".35"/>
+      </symbol>
+
+      <!-- Zone: Stay in Charge — crown -->
+      <symbol id="ico-crown" viewBox="0 0 32 32" fill="none">
+        <path d="M4 24 L8 12 L14 19 L20 6 L26 19 L28 24 Z" fill="white" opacity=".85"/>
+        <rect x="4" y="24" width="24" height="4" rx="2" fill="white" opacity=".55"/>
+        <circle cx="20" cy="7"  r="2.2" fill="white"/>
+        <circle cx="8"  cy="13" r="1.8" fill="white" opacity=".7"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <header class="page-header">
+    <div class="page-title">Kinder<span>AI</span> · Design Mockups <span style="font-size:.85rem;font-weight:600;opacity:.5">v2</span></div>
+    <div class="page-subtitle">10 key screens · Consistent brand system · ← → to navigate</div>
+  </header>
+
+  <div class="screen-info">
+    <span class="scr-counter" id="scr-counter">1 / 10</span>
+    <span class="scr-name" id="scr-name">Splash</span>
+    <span class="tier-chip chip-all" id="tier-chip">All Tiers</span>
+  </div>
+
+  <div class="phone-wrap">
+    <div class="phone">
+      <div class="d-island"></div>
+      <div class="screen-area">
+
+        <!-- ──────────────────────────── SCREEN 1: SPLASH -->
+        <div class="screen s-splash active" id="s1">
+          <div class="splash-glow"></div>
+          <div class="splash-inner">
+            <div class="splash-mark">
+              <svg width="48" height="48"><use href="#ico-logo"/></svg>
+            </div>
+            <div class="splash-wordmark">Kinder<em>AI</em></div>
+            <div class="splash-tag">Your AI adventure starts here</div>
+          </div>
+          <div class="splash-dots">
+            <div class="splash-dot"></div>
+            <div class="splash-dot"></div>
+            <div class="splash-dot"></div>
+          </div>
+        </div>
+
+        <!-- ──────────────────────────── SCREEN 2: WELCOME -->
+        <div class="screen s-welcome" id="s2">
+          <div class="welcome-body">
+            <div class="c-area">
+              <!-- Fox companion SVG — same as original, now consistent warm bg -->
+              <svg class="c-svg" viewBox="0 0 150 155" fill="none">
+                <ellipse cx="75" cy="120" rx="40" ry="28" fill="#F59E0B"/>
+                <circle cx="75" cy="72" r="36" fill="#F59E0B"/>
+                <polygon points="44,46 32,14 60,36" fill="#F59E0B"/>
+                <polygon points="106,46 118,14 90,36" fill="#F59E0B"/>
+                <polygon points="46,43 36,18 58,34" fill="#FDE68A"/>
+                <polygon points="104,43 114,18 92,34" fill="#FDE68A"/>
+                <ellipse cx="75" cy="80" rx="24" ry="19" fill="#FDE68A"/>
+                <circle cx="64" cy="66" r="6.5" fill="#0F1224"/>
+                <circle cx="86" cy="66" r="6.5" fill="#0F1224"/>
+                <circle cx="66" cy="64" r="2.2" fill="white"/>
+                <circle cx="88" cy="64" r="2.2" fill="white"/>
+                <ellipse cx="75" cy="78" rx="4.5" ry="3.5" fill="#0F1224"/>
+                <path d="M67 85 Q75 92 83 85" stroke="#0F1224" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+                <circle cx="54" cy="76" r="7.5" fill="#FCA5A5" opacity=".5"/>
+                <circle cx="96" cy="76" r="7.5" fill="#FCA5A5" opacity=".5"/>
+                <path d="M114 108 Q140 88 134 114 Q128 134 106 122" stroke="#F59E0B" stroke-width="14" fill="none" stroke-linecap="round"/>
+                <path d="M114 108 Q140 88 134 114 Q128 134 106 122" stroke="#FDE68A" stroke-width="6"  fill="none" stroke-linecap="round"/>
+              </svg>
+              <div class="c-bubble">Tap to begin! 👆</div>
+            </div>
+            <div class="welcome-hdg">Hello,<br>Explorer! 🌍</div>
+            <div class="welcome-sub">I'm Volt, your AI adventure companion. Ready to unlock new powers?</div>
+          </div>
+          <div class="welcome-foot">
+            <button class="cta">Let's Go! →</button>
+          </div>
+        </div>
+
+        <!-- ──────────────────────────── SCREEN 3: AGE SELECT -->
+        <div class="screen s-age" id="s3">
+          <div>
+            <div class="step-lbl">Step 1 of 3</div>
+            <div class="scr-hdg">How old are you? 🎂</div>
+          </div>
+          <div class="age-row">
+            <button class="age-step" onclick="changeAge(-1)">−</button>
+            <div class="age-num" id="age-val">7</div>
+            <button class="age-step" onclick="changeAge(1)">+</button>
+          </div>
+          <div class="tier-card" id="tier-card" style="background:rgba(58,182,236,.07);border:2px solid rgba(58,182,236,.2);">
+            <div class="tier-card-ico" id="tc-ico" style="background:var(--t2);">
+              <svg width="28" height="28"><use href="#ico-quest"/></svg>
+            </div>
+            <div>
+              <div class="tier-card-name" id="tc-name" style="color:var(--t2);">Builder</div>
+              <div class="tier-card-desc" id="tc-desc">Drag words to build prompts. No typing needed!</div>
+            </div>
+          </div>
+          <button class="cta" style="margin-top:auto;margin-bottom:3rem;">Continue →</button>
+        </div>
+
+        <!-- ──────────────────────────── SCREEN 4: AVATAR SELECT -->
+        <div class="screen s-avatar" id="s4">
+          <div>
+            <div class="step-lbl">Step 2 of 3</div>
+            <div class="scr-hdg">Choose your Explorer! 🧭</div>
+          </div>
+          <div class="avatar-grid">
+            <div class="av-card on" onclick="pickAv(this)">
+              <div class="av-em">🦊</div>
+              <div class="av-name">Volt</div>
+              <div class="av-trait">Curious &amp; quick-thinking</div>
+              <div class="av-tick">✓</div>
+            </div>
+            <div class="av-card" onclick="pickAv(this)">
+              <div class="av-em">🤖</div>
+              <div class="av-name">Circuit</div>
+              <div class="av-trait">Logical &amp; detail-oriented</div>
+            </div>
+            <div class="av-card" onclick="pickAv(this)">
+              <div class="av-em">🐉</div>
+              <div class="av-name">Blaze</div>
+              <div class="av-trait">Bold &amp; endlessly creative</div>
+            </div>
+            <div class="av-card" onclick="pickAv(this)">
+              <div class="av-em">🦉</div>
+              <div class="av-name">Sage</div>
+              <div class="av-trait">Wise &amp; always thoughtful</div>
+            </div>
+          </div>
+          <button class="cta" style="margin-top:auto;margin-bottom:3rem;">This is my Explorer! →</button>
+        </div>
+
+        <!-- ──────────────────────────── SCREEN 5: WORLD MAP -->
+        <div class="screen s-map" id="s5">
+          <!-- Decorative layers (absolute, behind content) -->
+          <div class="map-terrain"></div>
+          <div class="map-grid-bg"></div>
+
+          <!-- Header (fixed height) -->
+          <div class="map-hdr">
+            <div>
+              <div class="map-hi">Welcome back,</div>
+              <div class="map-name">Alex ✦</div>
+            </div>
+            <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.28rem;">
+              <div class="ap-pill">
+                <svg width="14" height="14" style="color:var(--brand)"><use href="#ico-quest"/></svg>
+                <span class="ap-val">1,250 AP</span>
+              </div>
+              <div class="streak-lbl">🔥 8-day streak</div>
+            </div>
+          </div>
+
+          <!-- Zone canvas — flex:1, position:relative, zones are absolutely inside -->
+          <div class="map-canvas">
+            <!-- Dashed path lines -->
+            <svg class="map-paths" viewBox="0 0 375 560" preserveAspectRatio="none">
+              <path d="M90 115 Q190 180 280 100" stroke="rgba(255,255,255,.1)" stroke-width="1.8" stroke-dasharray="6 5" fill="none"/>
+              <path d="M90 115 Q105 340 110 365" stroke="rgba(255,255,255,.1)" stroke-width="1.8" stroke-dasharray="6 5" fill="none"/>
+              <path d="M280 100 Q295 310 298 360" stroke="rgba(255,255,255,.1)" stroke-width="1.8" stroke-dasharray="6 5" fill="none"/>
+              <path d="M110 365 Q200 420 298 360" stroke="rgba(255,255,255,.08)" stroke-width="1.8" stroke-dasharray="6 5" fill="none"/>
+            </svg>
+
+            <!-- Zone: Ask Well (top-left) -->
+            <div class="zone z-ask">
+              <div class="zone-orb">
+                <svg width="34" height="34"><use href="#ico-ask"/></svg>
+                <div class="zone-lbl">Ask<br>Well</div>
+              </div>
+              <div class="zone-stars">⭐⭐⭐</div>
+            </div>
+
+            <!-- Zone: Think Critically (top-right) -->
+            <div class="zone z-think">
+              <div class="zone-orb">
+                <svg width="30" height="30"><use href="#ico-think"/></svg>
+                <div class="zone-lbl">Think<br>Critically</div>
+              </div>
+              <div class="zone-stars">⭐⭐☆</div>
+            </div>
+
+            <!-- Zone: Build with AI (bottom-left) -->
+            <div class="zone z-build">
+              <div class="zone-orb">
+                <svg width="28" height="28"><use href="#ico-build"/></svg>
+                <div class="zone-lbl">Build<br>with AI</div>
+              </div>
+              <div class="zone-stars">⭐☆☆</div>
+            </div>
+
+            <!-- Zone: Stay in Charge (bottom-right, locked) -->
+            <div class="zone z-charge">
+              <div class="zone-orb">
+                <svg width="30" height="30"><use href="#ico-crown"/></svg>
+                <div class="zone-lbl">Stay in<br>Charge</div>
+              </div>
+              <div class="zone-stars" style="font-size:.65rem;font-weight:700;color:rgba(255,255,255,.3);">Locked</div>
+            </div>
+
+            <!-- Companion -->
+            <div class="map-fox">🦊</div>
+          </div>
+
+          <!-- Tab bar -->
+          <div class="map-nav">
+            <div class="tab on">
+              <svg><use href="#ico-compass"/></svg>
+              <span class="tab-lbl">Map</span>
+            </div>
+            <div class="tab">
+              <svg><use href="#ico-quest"/></svg>
+              <span class="tab-lbl">Quests</span>
+            </div>
+            <div class="tab">
+              <svg><use href="#ico-badge"/></svg>
+              <span class="tab-lbl">Badges</span>
+            </div>
+            <div class="tab">
+              <svg><use href="#ico-profile"/></svg>
+              <span class="tab-lbl">Profile</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ──────────────────────────── SCREEN 6: LESSON TIER 1 -->
+        <div class="screen s-l1" id="s6">
+          <div class="lesson-top">
+            <div class="l-back" style="background:var(--warm-100);color:var(--text-500);">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="l-track" style="background:var(--warm-100);">
+              <div class="l-fill" style="background:var(--brand);width:33%;"></div>
+            </div>
+            <div class="l-hearts">❤️❤️❤️</div>
+          </div>
+          <div class="lesson-body">
+            <div class="speak" style="background:var(--dark-800);">
+              <div class="speak-ava">🦊</div>
+              <div class="speak-txt">Tap the picture that shows what you WANT!</div>
+              <div class="speak-audio" style="background:var(--brand);">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 5.5H4.5L8 2.5V13.5L4.5 10.5H2V5.5Z" fill="white"/><path d="M11 4.5C12.5 5.8 12.5 10.2 11 11.5" stroke="white" stroke-width="1.8" stroke-linecap="round"/><path d="M13 3C15.5 5 15.5 11 13 13" stroke="white" stroke-width="1.8" stroke-linecap="round" opacity=".6"/></svg>
+              </div>
+            </div>
+            <div class="icon-grid">
+              <div class="icon-tile"><div class="tile-em">🍕</div></div>
+              <div class="icon-tile correct"><div class="tile-em">🚀</div></div>
+              <div class="icon-tile"><div class="tile-em">🎸</div></div>
+              <div class="icon-tile"><div class="tile-em">🌊</div></div>
+            </div>
+            <div class="l-ctx">Ask Well · Mission 3 of 8</div>
+          </div>
+        </div>
+
+        <!-- ──────────────────────────── SCREEN 7: LESSON TIER 3 -->
+        <div class="screen s-l3" id="s7">
+          <div class="lesson-top">
+            <div class="l-back" style="background:#EDE8F7;color:var(--t3);">
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8L10 13" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="l-track" style="background:#EDE8F7;">
+              <div class="l-fill" style="background:var(--t3);width:60%;"></div>
+            </div>
+            <div class="l-hearts">❤️❤️❤️</div>
+          </div>
+          <div class="lesson-body">
+            <div class="speak" style="background:var(--t3);">
+              <div class="speak-ava">🦊</div>
+              <div class="speak-txt">Read what the AI wrote. Something's not quite right!</div>
+              <div class="speak-audio" style="background:rgba(0,0,0,.2);">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 5.5H4.5L8 2.5V13.5L4.5 10.5H2V5.5Z" fill="white"/><path d="M11 4.5C12.5 5.8 12.5 10.2 11 11.5" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>
+              </div>
+            </div>
+            <div class="challenge-box">
+              <div class="chal-lbl">AI Response</div>
+              <div class="ai-quote">"The Great Wall of China is so big, you can see it from the Moon with the naked eye."</div>
+              <div class="chal-q">What's the problem with this answer?</div>
+            </div>
+            <div style="width:100%;">
+              <div style="font-size:.72rem;font-weight:700;color:var(--text-300);margin-bottom:.5rem;">Start your answer with...</div>
+              <div class="chips-row">
+                <div class="chip-btn on">This is wrong because...</div>
+                <div class="chip-btn">The AI forgot that...</div>
+                <div class="chip-btn">A better answer would...</div>
+              </div>
+              <textarea class="t3-ta" rows="3" placeholder="...this is a common myth. Astronauts confirmed the Wall is invisible from space!"></textarea>
+            </div>
+            <button class="cta cta-t3">Submit Answer →</button>
+          </div>
+        </div>
+
+        <!-- ──────────────────────────── SCREEN 8: QUEST COMPLETE -->
+        <div class="screen s-complete" id="s8">
+          <div class="comp-glow"></div>
+          <div class="confetti-area" id="confetti-area"></div>
+          <div class="medal-ico">🏅</div>
+          <div class="comp-ttl">Quest Complete!</div>
+          <div class="comp-stars">⭐⭐⭐</div>
+          <div class="xp-box">
+            <div class="xpe-lbl">Adventure Points Earned</div>
+            <div class="xpe-val">+175 AP</div>
+          </div>
+          <div class="badge-row">
+            <div class="br-ico">🎯</div>
+            <div>
+              <div class="br-new">New Badge!</div>
+              <div class="br-name">Sharp Thinker</div>
+            </div>
+          </div>
+          <button class="cta" style="position:relative;">Keep Exploring! →</button>
+        </div>
+
+        <!-- ──────────────────────────── SCREEN 9: PROFILE -->
+        <div class="screen s-profile" id="s9">
+          <div class="prof-hero">
+            <div class="ring">
+              <div class="ring-inner">🦊</div>
+            </div>
+            <div class="prof-name">Alex</div>
+            <div class="prof-pill">⚡ Builder — Level 7</div>
+            <div class="prof-stats">
+              <div class="ps"><div class="ps-v">1,250</div><div class="ps-l">AP Total</div></div>
+              <div class="ps-div"></div>
+              <div class="ps"><div class="ps-v">🔥 8</div><div class="ps-l">Streak</div></div>
+              <div class="ps-div"></div>
+              <div class="ps"><div class="ps-v">23</div><div class="ps-l">Quests</div></div>
+            </div>
+          </div>
+          <div class="prof-body">
+            <div>
+              <div class="sec-hd">Level Progress</div>
+              <div class="xp-card">
+                <div class="xpc-hd"><span class="xpc-lv">Level 7 → Level 8</span><span class="xpc-ct">1,250 / 1,800 AP</span></div>
+                <div class="xp-trk"><div class="xp-fill"></div></div>
+              </div>
+            </div>
+            <div>
+              <div class="sec-hd">My Badges</div>
+              <div class="badge-shelf">
+                <div class="btile"><div class="bt-ico">🎯</div><div class="bt-nm">Sharp Thinker</div></div>
+                <div class="btile"><div class="bt-ico">💬</div><div class="bt-nm">Great Asker</div></div>
+                <div class="btile"><div class="bt-ico">🔥</div><div class="bt-nm">On a Roll!</div></div>
+                <div class="btile"><div class="bt-ico">⭐</div><div class="bt-nm">Star Learner</div></div>
+                <div class="btile dim"><div class="bt-ico">🔧</div><div class="bt-nm">Builder Pro</div></div>
+                <div class="btile dim"><div class="bt-ico">👑</div><div class="bt-nm">In Charge</div></div>
+                <div class="btile dim"><div class="bt-ico">🌟</div><div class="bt-nm">All Star</div></div>
+                <div class="btile dim"><div class="bt-ico">🚀</div><div class="bt-nm">Launch Ready</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ──────────────────────────── SCREEN 10: PARENT DASHBOARD -->
+        <div class="screen s-parent" id="s10">
+          <div class="par-hdr">
+            <div class="par-back">← Parent Dashboard</div>
+            <div class="par-ttl">Alex's Progress</div>
+            <div class="par-sub">Last active: Today · 18 min</div>
+          </div>
+          <div class="par-body">
+            <div class="child-row">
+              <div class="ch-av">🦊</div>
+              <div style="flex:1;">
+                <div class="ch-name">Alex, age 8</div>
+                <div class="ch-tier">Builder Tier · Level 7</div>
+                <div class="ch-dot">🟢 Active today</div>
+              </div>
+            </div>
+            <div class="mets">
+              <div class="met"><div class="met-ico">⏱️</div><div class="met-val">18m</div><div class="met-lbl">Today</div></div>
+              <div class="met"><div class="met-ico">📅</div><div class="met-val">1.8h</div><div class="met-lbl">This Week</div></div>
+              <div class="met"><div class="met-ico">✅</div><div class="met-val">23</div><div class="met-lbl">Quests Done</div></div>
+              <div class="met"><div class="met-ico">🔥</div><div class="met-val">8d</div><div class="met-lbl">Streak</div></div>
+            </div>
+            <div class="pillars-card">
+              <div class="sec-hd" style="margin-bottom:.9rem;">Skill Pillars</div>
+              <div style="display:flex;flex-direction:column;gap:.72rem;">
+                <div class="pillar">
+                  <div style="width:22px;font-size:.95rem;flex-shrink:0;">💬</div>
+                  <div style="font-size:.74rem;font-weight:700;color:var(--text-900);width:88px;flex-shrink:0;">Ask Well</div>
+                  <div class="pil-trk"><div class="pil-fill" style="width:72%;background:var(--t1);"></div></div>
+                  <div class="pil-pct">72%</div>
+                </div>
+                <div class="pillar">
+                  <div style="width:22px;font-size:.95rem;flex-shrink:0;">🔍</div>
+                  <div style="font-size:.74rem;font-weight:700;color:var(--text-900);width:88px;flex-shrink:0;">Think Critically</div>
+                  <div class="pil-trk"><div class="pil-fill" style="width:45%;background:var(--t2);"></div></div>
+                  <div class="pil-pct">45%</div>
+                </div>
+                <div class="pillar">
+                  <div style="width:22px;font-size:.95rem;flex-shrink:0;">🔧</div>
+                  <div style="font-size:.74rem;font-weight:700;color:var(--text-900);width:88px;flex-shrink:0;">Build with AI</div>
+                  <div class="pil-trk"><div class="pil-fill" style="width:20%;background:var(--success);"></div></div>
+                  <div class="pil-pct">20%</div>
+                </div>
+                <div class="pillar">
+                  <div style="width:22px;font-size:.95rem;flex-shrink:0;">👑</div>
+                  <div style="font-size:.74rem;font-weight:700;color:var(--text-900);width:88px;flex-shrink:0;">Stay in Charge</div>
+                  <div class="pil-trk"><div class="pil-fill" style="width:0%;background:var(--t3);"></div></div>
+                  <div class="pil-pct">0%</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /screen-area -->
+      <div class="home-bar"></div>
+    </div><!-- /phone -->
+  </div><!-- /phone-wrap -->
+
+  <div class="nav-row">
+    <button class="nav-btn" id="prev-btn" onclick="go(-1)" disabled>←</button>
+    <div class="dots" id="dots"></div>
+    <button class="nav-btn" id="next-btn" onclick="go(1)">→</button>
+  </div>
+
+  <div class="notes-panel">
+    <div class="notes-ttl">Design Notes</div>
+    <ul class="notes-ul" id="notes-ul"></ul>
+  </div>
+
+  <script>
+    const SCREENS = [
+      { name:'Splash',                     tier:'chip-all', tl:'All Tiers',
+        notes:['Custom SVG compass-star logo mark — not an emoji','Adventure Amber (#F5A420) is the single brand primary used throughout every screen','Minimal loading state — three amber dots only','Dark bg (#14182E) reserved for: Splash, Map, Complete, Profile hero — creates visual rhythm'] },
+      { name:'Welcome',                    tier:'chip-all', tl:'All Tiers',
+        notes:['Fox companion (Volt) leads emotional hook before any UI','Warm parchment bg (#FDF8EF) signals: safe, playful, learning mode','Single gold CTA — one action, no decision fatigue','Volt\'s speech bubble uses the dark brand color (#14182E), not a random gray'] },
+      { name:'Age Select',                 tier:'chip-all', tl:'All Tiers',
+        notes:['Tier preview card color updates live as you tap +/−','T1=Amber, T2=Sky, T3=Violet, T4=Jade — four-color family, all harmonious','No keyboard input — stepper only, safe for all ages','Big number (5.5rem Baloo 2) is the hero element of the screen'] },
+      { name:'Avatar Select',              tier:'chip-all', tl:'All Tiers',
+        notes:['Gold border on selected card — brand amber used for selection state, not a random blue','Four options visible at once — no scroll, no tab navigation','Companions avoid default gendering','Tick badge: same amber brand circle, consistent with CTA buttons'] },
+      { name:'World Map',                  tier:'chip-all', tl:'All Tiers',
+        notes:['Fixed layout: map-hdr (static) + map-canvas (flex:1) + map-nav (static) — no overflow issues','Custom SVG zone icons (not emoji) inside each orb: speech, eye, hexagons, crown','Custom SVG navigation icons: compass, lightning, shield+star, person — not system icons','Zone 4 (Stay in Charge) visually dimmed — locked state without hiding it','AP = Adventure Points — consistent language with brand vocabulary'] },
+      { name:'Lesson — Tier 1 (Sparks)',   tier:'chip-t1',  tl:'Sparks · Tier 1',
+        notes:['ZERO text in activity area — icon grid only, 100% visual','Audio icon uses custom speaker SVG, amber background — brand consistent','Back arrow is a custom SVG chevron, not ← character','Progress fill uses brand amber — same fill style as XP bar, pillar bars'] },
+      { name:'Lesson — Tier 3 (Makers)',   tier:'chip-t3',  tl:'Makers · Tier 3',
+        notes:['Violet (#8A68D4) replaces amber as the primary color — tier theming','CTA button inherits tier color (violet) vs brand amber — visual signal of context','Sentence starter chips reduce blank-page anxiety — structured open-ended input','All interactive elements remain consistent shape/radius — only color shifts between tiers'] },
+      { name:'Quest Complete',             tier:'chip-all', tl:'All Tiers',
+        notes:['Dark bg reused from Splash — reinforces celebration = adventure mode','Brand amber used for XP value — most important number on screen','Badge unlock integrated here, not a separate notification','Single continue action, wide CTA button — no choice paralysis after a win'] },
+      { name:'Profile',                    tier:'chip-all', tl:'All Tiers',
+        notes:['Conic gradient ring matches Splash logo colors — brand continuity','XP bar gradient amber→coral matches Splash icon — consistent decorative system','Locked badges are greyscale + transparent — FOMO without dark pattern','Dark hero matches Map/Splash dark bg — same #14182E across all dark surfaces'] },
+      { name:'Parent Dashboard',           tier:'chip-par', tl:'Parent View',
+        notes:['Dark header (#14182E) same value as child dark screens — one system, two contexts','Neutral light bg (#EEF1F8) — distinct from child warm (#FDF8EF), signals: different mode','Pillar bars use the same tier colors (amber/sky/green/violet) as the map zones','Clean, data-first layout — no gamification, no companion, no confetti','5-tap lock guards this screen; no preview of that here — see spec for details'] },
+    ];
+
+    let cur = 0;
+    const total = SCREENS.length;
+
+    const dotsEl   = document.getElementById('dots');
+    const notesUl  = document.getElementById('notes-ul');
+    const scrName  = document.getElementById('scr-name');
+    const scrCtr   = document.getElementById('scr-counter');
+    const tierChip = document.getElementById('tier-chip');
+    const allScr   = document.querySelectorAll('.screen');
+
+    for (let i = 0; i < total; i++) {
+      const d = document.createElement('div');
+      d.className = 'dot' + (i===0?' active':'');
+      d.onclick = () => goTo(i);
+      dotsEl.appendChild(d);
+    }
+
+    function goTo(idx) {
+      allScr[cur].classList.remove('active');
+      cur = idx;
+      allScr[cur].classList.add('active');
+      const s = SCREENS[cur];
+      scrCtr.textContent = `${cur+1} / ${total}`;
+      scrName.textContent = s.name;
+      tierChip.className  = 'tier-chip ' + s.tier;
+      tierChip.textContent = s.tl;
+      notesUl.innerHTML = s.notes.map(n=>`<li>${n}</li>`).join('');
+      dotsEl.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('active', i===cur));
+      document.getElementById('prev-btn').disabled = cur === 0;
+      document.getElementById('next-btn').disabled = cur === total-1;
+      if (cur === 7) spawnConfetti();
+    }
+
+    function go(dir) { const n=cur+dir; if(n>=0&&n<total) goTo(n); }
+
+    // Avatar picker
+    function pickAv(el) {
+      document.querySelectorAll('.av-card').forEach(c => {
+        c.classList.remove('on');
+        c.querySelector('.av-tick')?.remove();
+      });
+      el.classList.add('on');
+      const t = document.createElement('div'); t.className='av-tick'; t.textContent='✓'; el.appendChild(t);
+    }
+
+    // Age / tier picker
+    const TIERS = [
+      { min:4,  max:6,  name:'Sparks',    color:'var(--t1)', bg:'rgba(245,164,32,.08)',  bd:'rgba(245,164,32,.2)',  icon:'#ico-logo',    desc:'Icons and audio only. Zero reading needed!' },
+      { min:7,  max:9,  name:'Builder',   color:'var(--t2)', bg:'rgba(58,182,236,.08)',  bd:'rgba(58,182,236,.2)',  icon:'#ico-quest',   desc:'Drag words to build prompts. No typing needed!' },
+      { min:10, max:12, name:'Maker',     color:'var(--t3)', bg:'rgba(138,104,212,.08)', bd:'rgba(138,104,212,.2)', icon:'#ico-badge',   desc:'Guided typing with sentence starters.' },
+      { min:13, max:15, name:'Architect', color:'var(--t4)', bg:'rgba(28,189,172,.08)',  bd:'rgba(28,189,172,.2)',  icon:'#ico-compass', desc:'Free-form typing. Full keyboard. Open-ended prompts.' },
+    ];
+    let age = 7;
+    function getTier(a) { return TIERS.find(t=>a>=t.min&&a<=t.max)||TIERS[3]; }
+    function changeAge(d) {
+      age = Math.max(4, Math.min(15, age+d));
+      document.getElementById('age-val').textContent = age;
+      const t = getTier(age);
+      const card = document.getElementById('tier-card');
+      card.style.background = t.bg;
+      card.style.border = `2px solid ${t.bd}`;
+      document.getElementById('tc-ico').style.background = t.color;
+      document.getElementById('tc-ico').innerHTML = `<svg width="28" height="28"><use href="${t.icon}"/></svg>`;
+      document.getElementById('tc-name').textContent = t.name;
+      document.getElementById('tc-name').style.color  = t.color;
+      document.getElementById('tc-desc').textContent = t.desc;
+    }
+
+    // Confetti
+    const CFT = ['⭐','🌟','✨','🎉','🎊','💫'];
+    function spawnConfetti() {
+      const a = document.getElementById('confetti-area'); a.innerHTML = '';
+      for (let i=0;i<20;i++) {
+        const c = document.createElement('div'); c.className='cnf';
+        c.textContent = CFT[Math.floor(Math.random()*CFT.length)];
+        c.style.cssText=`left:${8+Math.random()*84}%;top:${-5+Math.random()*25}%;--dur:${1.2+Math.random()*1.4}s;animation-delay:${Math.random()*.7}s;font-size:${.9+Math.random()*.8}rem;`;
+        a.appendChild(c);
+      }
+    }
+
+    // Starfield
+    (function() {
+      const sf = document.getElementById('starfield');
+      for (let i=0;i<90;i++) {
+        const s = document.createElement('div'); s.className='star';
+        const sz = Math.random()<.7?1:Math.random()<.6?2:3;
+        s.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--dur:${2+Math.random()*3}s;--delay:${Math.random()*5}s;`;
+        sf.appendChild(s);
+      }
+    })();
+
+    document.addEventListener('keydown', e => {
+      if (e.key==='ArrowRight'||e.key==='ArrowDown') go(1);
+      if (e.key==='ArrowLeft' ||e.key==='ArrowUp')   go(-1);
+    });
+
+    goTo(0);
+  </script>
+</body>
+</html>
