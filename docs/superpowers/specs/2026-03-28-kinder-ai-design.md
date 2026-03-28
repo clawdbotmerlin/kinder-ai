@@ -9,10 +9,11 @@
 
 KinderAI is a mobile-first AI literacy app for children aged 4–15. Children learn to **thrive in an AI-powered world** through short daily sessions (10–20 min), delivered via a gamified adventure world on Android (iOS later).
 
-### Three Learning Pillars
-1. **Prompting Principles** — what makes a good prompt, how to be specific, give context, and iterate
-2. **Know What You Want** — articulating goals clearly, breaking problems into steps, thinking before asking
-3. **AI as Lego** — discovering AI tools as building blocks, connecting them creatively to solve real-world problems
+### Four Learning Pillars
+1. **Ask Well** — know what you want, express it clearly, give context, and iterate. The full prompting cycle as one skill.
+2. **Think Critically** — evaluate AI outputs, spot mistakes and bias, know when NOT to use AI, verify before trusting
+3. **Build with AI** — AI as Lego, combining tools creatively, solving real-world problems, being the architect not just the user
+4. **Stay in Charge** — AI serves you, not the other way around. Human creativity, values, and decisions lead. AI assists. For Tier 1: "you're the boss, the robot helps you." For Tier 3: autonomy, creative ownership, and AI dependency awareness.
 
 ### Core Design Principles
 - Playful, adventurous, joyful — every screen feels like an adventure
@@ -57,12 +58,12 @@ Each zone is adventure-themed, not technology-themed. The AI concept is the lear
 
 | Zone | Theme | Learning Pillar | Tier |
 |------|-------|----------------|------|
-| 🌱 Sprout Valley | What is AI? | Foundations | Free — all tiers |
-| 🤖 Robot City | How AI learns | Prompting Principles | Free — all tiers |
-| 🧠 The Thinking Forest | Data and patterns | Know What You Want | Free (partial) / Premium |
-| 🎨 Creator Islands | AI and creativity | AI as Lego | Premium |
-| 🔭 Starship Observatory | AI and the future | AI as Lego | Premium |
-| + Future zones | Expandable | All pillars | Premium |
+| 🌱 Sprout Valley | What is AI? | Foundations (all 4 pillars intro) | Free — all tiers |
+| 🤖 Robot City | How to talk to AI | Ask Well | Free — all tiers |
+| 🧠 The Thinking Forest | Question everything | Think Critically | Free (partial) / Premium |
+| 🎨 Creator Islands | Make things with AI | Build with AI | Premium |
+| 🔭 Starship Observatory | You're the captain | Stay in Charge | Premium |
+| + Future zones | Expandable | All pillars deepened | Premium |
 
 **Tier 1 map exception:** Simplified linear "stepping stone" path (5–6 visible locations, no zoom, no spatial orientation required). Same visual world, different interaction model.
 
@@ -227,7 +228,7 @@ Accessible after completing a mission in a zone.
 Pre-entry screen per tier (see Section 6 — Sandbox Safety Architecture).
 First entry only: companion tutorial — "Try asking me something!" with 3 tappable example prompts.
 Interface: Clean chat. Companion avatar visible. Voice-first Tier 1 (3–5s silence tolerance). Text Tier 2–3. Hard content filter active. Companion intercept for out-of-scope queries.
-This is the **prompting playground** — directly tied to Learning Pillar 1.
+This is the **prompting playground** — directly tied to Pillar 1 (Ask Well) and Pillar 4 (Stay in Charge).
 
 **Screen 17: Celebration Break (Tier 1 only)**
 Fires after each micro-activity completes (activity-completion trigger, not time-based).

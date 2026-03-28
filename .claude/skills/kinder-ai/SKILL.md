@@ -8,6 +8,12 @@ description: Use when working on any task within the KinderAI project — an AI 
 ## What Is KinderAI?
 A mobile-first AI literacy app for children aged 4–15. Children learn how to understand, use, and think critically about AI through short daily sessions (10–20 min), gamified progression, and age-appropriate content.
 
+## Four Learning Pillars
+1. **Ask Well** — know what you want, express clearly, give context, iterate (full prompting cycle)
+2. **Think Critically** — evaluate AI outputs, spot bias/mistakes, know when NOT to use AI
+3. **Build with AI** — AI as Lego, combine tools creatively, solve real-world problems
+4. **Stay in Charge** — AI serves you, not vice versa. Human creativity and values lead.
+
 ## Core Design Principles
 - **Playful, adventurous, joyful** — every screen should feel like an adventure
 - **Safety-first** — no personal data collection beyond what's required; COPPA-compliant
