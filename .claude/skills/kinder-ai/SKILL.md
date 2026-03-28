@@ -22,11 +22,12 @@ A mobile-first AI literacy app for children aged 4–15. Children learn how to u
 
 ## Age Tiers
 
-| Tier | Ages | Name | Key Constraint |
-|------|------|------|----------------|
-| 1 | 4–6 | Explorers | No reading/writing required; voice + tap + visuals only |
-| 2 | 7–10 | Builders | Simple text, guided input, short sentences |
-| 3 | 11–15 | Pioneers | Full text, critical thinking, open-ended prompts |
+| Tier | Ages | Name | Input Model | Key Constraint |
+|------|------|------|-------------|----------------|
+| 1 | 4–6 | **Sparks** | Tap + drag-drop icons. Zero words. Audio-narrated. | No reading or writing — voice + tap + visuals only |
+| 2 | 7–9 | **Builders** | Drag-and-drop word bank. No free typing. | Early reader — no keyboard input |
+| 3 | 10–12 | **Makers** | Guided typing — sentence starters, fill-in-the-blank. | Fluent reader — short keyboard input only |
+| 4 | 13–15 | **Architects** | Free text typebox. Full keyboard. | Abstract thinker — open-ended prompts |
 
 ## Gamification Pillars
 - XP + level-up system per tier
