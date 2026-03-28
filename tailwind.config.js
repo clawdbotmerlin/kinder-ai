@@ -15,6 +15,11 @@ module.exports = {
         t4:       '#1CBDAC',
         success:  '#3AC47A',
         error:    '#E95C5C',
+        text: {
+          dark:  '#0F1224',
+          mid:   '#5C6375',
+          light: '#9299B0',
+        },
       },
     },
   },
