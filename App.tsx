@@ -1,11 +1,11 @@
-import { StatusBar } from 'expo-status-bar';
-import { Text, View } from 'react-native';
+import React from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { RootNavigator } from './src/navigation/RootNavigator';
 
 export default function App() {
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#14182E' }}>
-      <Text style={{ color: '#F5A420', fontSize: 24, fontWeight: 'bold' }}>KinderAI</Text>
-      <StatusBar style="light" />
-    </View>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <RootNavigator />
+    </GestureHandlerRootView>
   );
 }
