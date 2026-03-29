@@ -1,5 +1,6 @@
 import { useUserStore } from '../stores/userStore';
-import { getTierConfig, TierConfig, TierNumber } from '../constants/tiers';
+import { TierConfig, TierNumber } from '../constants/tiers';
+import { getTierConfig } from '../utils/tierUtils';
 
 export function useTier(): TierConfig {
   const profile = useUserStore((s) => s.profile);

@@ -4,11 +4,11 @@ import { Audio } from 'expo-av';
 export function useAudio() {
   const soundRef = useRef<Audio.Sound | null>(null);
 
-  async function playFile(require: number) {
+  async function playFile(source: number) {
     if (soundRef.current) {
       await soundRef.current.unloadAsync();
     }
-    const { sound } = await Audio.Sound.createAsync(require);
+    const { sound } = await Audio.Sound.createAsync(source);
     soundRef.current = sound;
     await sound.playAsync();
   }

@@ -7,7 +7,6 @@ interface TierButtonProps {
   icon?: React.ReactNode;
   onPress: () => void;
   variant?: 'primary' | 'secondary';
-  audioFile?: number;
   testID?: string;
 }
 
