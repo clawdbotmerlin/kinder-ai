@@ -2,12 +2,12 @@ export interface AvatarDef {
   id: string;
   name: string;
   emoji: string;
-  trait: string;
+  introLine: string;
 }
 
 export const AVATARS: AvatarDef[] = [
-  { id: 'volt',    name: 'Volt',    emoji: '🦊', trait: 'Curious & quick-thinking' },
-  { id: 'circuit', name: 'Circuit', emoji: '🤖', trait: 'Logical & detail-oriented' },
-  { id: 'blaze',   name: 'Blaze',   emoji: '🐉', trait: 'Bold & endlessly creative' },
-  { id: 'sage',    name: 'Sage',    emoji: '🦉', trait: 'Wise & always thoughtful' },
+  { id: 'avatar-1', name: 'Zara', emoji: '🤖', introLine: "Hi, I'm Zara! I love adventures!" },
+  { id: 'avatar-2', name: 'Bolt', emoji: '⚡', introLine: "I'm Bolt! Let's explore!" },
+  { id: 'avatar-3', name: 'Nova', emoji: '🌟', introLine: "Nova here! Ready to learn?" },
+  { id: 'avatar-4', name: 'Chip', emoji: '🔬', introLine: "Hey! I'm Chip. Science is cool!" },
 ];

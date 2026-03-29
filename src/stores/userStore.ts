@@ -28,16 +28,19 @@ interface UserState {
   profile: UserProfile | null;
   isOnboardingComplete: boolean;
   pendingAge: number | null;
+  pendingAvatarId: string | null;
   createProfile: (input: CreateProfileInput) => void;
   completeOnboarding: () => void;
   addXP: (amount: number) => void;
   setPendingAge: (age: number) => void;
+  setPendingAvatarId: (id: string) => void;
 }
 
 export const useUserStore = create<UserState>()((set) => ({
   profile: null,
   isOnboardingComplete: false,
   pendingAge: null,
+  pendingAvatarId: null,
 
   createProfile: (input) => {
     const now = new Date().toISOString();
@@ -69,4 +72,5 @@ export const useUserStore = create<UserState>()((set) => ({
     })),
 
   setPendingAge: (age) => set({ pendingAge: age }),
+  setPendingAvatarId: (id) => set({ pendingAvatarId: id }),
 }));
