@@ -17,7 +17,7 @@ const TIER1_NAMES = [
   { name: 'Luna', symbol: '🌙' },
 ];
 
-const SUGGESTED_NAMES = ['Sparky', 'Zara', 'Bolt', 'Nova', 'Chip', 'Luna'];
+const SUGGESTED_NAMES = TIER1_NAMES.map((x) => x.name);
 
 export function NameScreen() {
   const navigation = useNavigation<Nav>();
