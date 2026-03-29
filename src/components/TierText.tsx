@@ -5,7 +5,7 @@ import { useAudio } from '../hooks/useAudio';
 
 interface TierTextProps {
   children: string;
-  audioFile?: number;
+  audioFile: number;
   className?: string;
 }
 
